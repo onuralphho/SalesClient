@@ -21,7 +21,7 @@ const ProductCard = (props: Props) => {
             </div>
         </div>
         <div className="flex p-2 gap-2 justify-end items-center text-2xl font-semibold ">
-          <span className="">{props.product.price} $</span>
+          <span className="">{props.product.discountedPrice ?? props.product.price} $</span>
           <Link to={props.product.sku} className="bg-orange-500 py-0.5 items-center px-4 rounded-sm ">Buy</Link>
         </div>
       </div>

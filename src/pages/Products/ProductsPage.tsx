@@ -10,15 +10,22 @@ const ProductsPage = () => {
     const getProducts = async () => {
       const res = await fetch(endPointUrl + "/api/product");
       const data = await res.json();
-      setProducts(data)
+      setProducts(data);
     };
-
     getProducts();
   }, []);
 
-  return <div className="flex flex-wrap py-2 justify-around">{products?.map(product=>(
-    <ProductCard key={product.sku} product={product} />
-  ))}</div>;
+  if (products?.length === 0) {
+    return <div>No product found!</div>;
+  } else {
+    return (
+      <div className="flex flex-wrap py-2 justify-around">
+        {products?.map((product) => (
+          <ProductCard key={product.sku} product={product} />
+        ))}
+      </div>
+    );
+  }
 };
 
 export default ProductsPage;
