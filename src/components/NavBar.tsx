@@ -7,12 +7,20 @@ const NavBar = () => {
         <h1 className="text-3xl md:text-5xl border-r pr-4">Colin's</h1>
       </Link>
       <ul className="flex lg:gap-1  lg:text-xl  h-full items-end">
-        <li>
+        <li className="relative group">
           <Link
             to={"/products"}
             className="hover:bg-[#ffffff13] px-2 transition-all rounded-md "
           >
             Products
+          </Link>
+        </li>
+        <li className="relative group">
+          <Link
+            to={"products/add"}
+            className="hover:bg-[#ffffff13] px-2 transition-all rounded-md "
+          >
+            Add New
           </Link>
         </li>
       </ul>

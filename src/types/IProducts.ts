@@ -1,10 +1,10 @@
 type TCampaing = {
+    id:number
     description:string,
     discountValue:number,
     startDate:Date,
     endDate:Date,
     title:string
-
 }
 
 interface IProducts {
