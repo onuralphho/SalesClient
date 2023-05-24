@@ -13,6 +13,7 @@ interface IProducts {
     description: string | null,
     name:string,
     price:number,
-    discountedPrice:number,
+    stockCount:number,
+    discountedPrice:number | null,
     sku:string
 }

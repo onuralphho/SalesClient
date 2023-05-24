@@ -19,7 +19,7 @@ const ProductsPage = () => {
     return <div>No product found!</div>;
   } else {
     return (
-      <div className="flex flex-wrap py-2 justify-around">
+      <div className="flex flex-wrap py-2 justify">
         {products?.map((product) => (
           <ProductCard key={product.sku} product={product} />
         ))}
