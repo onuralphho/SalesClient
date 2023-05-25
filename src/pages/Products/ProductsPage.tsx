@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard";
+import ProductLoading from "../../components/ProductLoading";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<IProducts[] | undefined>();
@@ -20,9 +21,13 @@ const ProductsPage = () => {
   } else {
     return (
       <div className="flex flex-wrap py-2 -z-20 ">
-        {products?.map((product) => (
-          <ProductCard key={product.sku} product={product} />
-        ))}
+        {products ? (
+          products?.map((product: IProducts) => (
+            <ProductCard key={product.sku} product={product} />
+          ))
+        ) : (
+          <ProductLoading />
+        )}
       </div>
     );
   }

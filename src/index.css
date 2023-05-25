@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.loader-inner{
+    transform: translateX(-1900px) rotate(20deg);
+  top: -500px;
+  animation: move-right 3s linear infinite alternate;
+}
+
+
+@keyframes move-right {
+    0%{
+        transform: translateX(-1000px) rotate(20deg)
+    }
+    100%{
+        transform: translateX(1000px) rotate(20deg)
+    }
+}
