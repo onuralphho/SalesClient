@@ -1,25 +1,54 @@
-import { FormEvent, ReactHTMLElement, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ProductDetailPage = () => {
   const { sku } = useParams();
   const [productDetails, setProductDetails] = useState<IProducts | undefined>();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [difference, setDifference] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+  });
 
   useEffect(() => {
     const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
     const getDetails = async () => {
       const res = await fetch(endPointUrl + "/api/product/" + sku);
-      const data = await res.json();
+      const data: IProducts = await res.json();
       console.log(data);
       setProductDetails(data);
+      if (data.activeCampaign) {
+        setStartDate(data.activeCampaign.startDate);
+        setEndDate(data.activeCampaign?.endDate);
+      }
     };
     getDetails();
   }, []);
 
   const submitFormHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({title:titleRef})
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const end = new Date(endDate).getTime();
+
+      const diff = end - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      console.log({ days, hours, minutes });
+      setDifference({ days, hours, minutes });
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [startDate, endDate]);
 
   return (
     <div className="container mx-auto pb-40   max-w-[1300px] max-lg:items-center flex gap-5 md:gap-20 max-lg:flex-col  h-full p-5  ">
@@ -39,25 +68,39 @@ const ProductDetailPage = () => {
             <h2 className="capitalize text-2xl md:text-5xl break-words font-bold">
               {productDetails?.name}
             </h2>
-            <div className="text-sm font-bold absolute group  rotate-12 flex flex-col justify-center items-center -right-4 -top-4 p-1 aspect-square rounded-full bg-green-500  ">
-              <span>-{productDetails?.activeCampaign?.discountValue} %</span>
-              <div className="flex flex-col border w-max p-2 bg-[#000000ab] invisible shadow-white opacity-0 translate-x-14 group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 transition-all rounded-md  absolute font-normal text-xs right-5 bottom-8 -rotate-12">
-                <span>{productDetails?.activeCampaign?.title}</span>
-                <span>{productDetails?.activeCampaign?.description}</span>
+            {productDetails?.activeCampaign && (
+              <div className="text-sm font-bold absolute group  rotate-12 flex flex-col justify-center items-center -right-4 -top-4 p-1 aspect-square rounded-full bg-green-500  ">
+                <span>-{productDetails?.activeCampaign?.discountValue} %</span>
+                <div className="flex flex-col border w-max p-2 bg-[#000000ab] invisible shadow-white opacity-0 translate-x-14 group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 transition-all rounded-md  absolute font-normal text-xs right-5 bottom-8 -rotate-12">
+                  <span>{productDetails?.activeCampaign?.title}</span>
+                  <span>{productDetails?.activeCampaign?.description}</span>
+                </div>
               </div>
-              
-            </div>
+            )}
           </div>
           <p className="text-lg opacity-80">{productDetails?.description}</p>
         </div>
         <div className="flex justify-between text-2xl">
           <div className="flex w-full justify-between">
             {productDetails?.discountedPrice ? (
-              <div className="flex  gap-3 items-center">
-                <span className="">{productDetails?.discountedPrice} $</span>
-                <span className="line-through text-sm opacity-80  text-red-500">
-                  {productDetails?.price} $
-                </span>
+              <div className="flex flex-col gap-2  md:items-end ">
+                <div className="flex w-full  items-end gap-1 ">
+                  <span className="">{productDetails?.discountedPrice} $</span>
+                  <span className="line-through text-sm opacity-80  text-red-500">
+                    {productDetails?.price} $
+                  </span>
+                </div>
+                <div className="text-sm italic opacity-90">
+                  {difference.days} d :{" "}
+                  {difference.hours < 10
+                    ? "0" + difference.hours
+                    : difference.hours}{" "}
+                  h :{" "}
+                  {difference.minutes < 10
+                    ? "0" + difference.minutes
+                    : difference.minutes}{" "}
+                  m
+                </div>
               </div>
             ) : (
               <span className="">{productDetails?.price} $ </span>
@@ -67,8 +110,8 @@ const ProductDetailPage = () => {
                 Stock: {productDetails?.stockCount}
               </span>
 
-              <button className="border border-[#ffffff48] px-4 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
-                Buy
+              <button className="border border-[#ffffff48] text-sm p-2 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
+                Add to cart
               </button>
             </div>
           </div>
