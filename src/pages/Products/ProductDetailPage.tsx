@@ -18,6 +18,7 @@ const ProductDetailPage = () => {
 
   const submitFormHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log({title:titleRef})
   };
 
   return (
