@@ -1,7 +1,7 @@
 type TCampaing = {
-    id:number
-    description:string,
-    discountValue:number,
+    id?:number
+    description:string|undefined,
+    discountValue:number|null,
     startDate:Date,
     endDate:Date,
     title:string

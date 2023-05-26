@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
+import CampaignForm from "../../components/CampaignForm";
 
 const AddNewPage = () => {
   const [campaigns, setCampaigns] = useState<TCampaing[] | undefined>();
@@ -63,7 +64,6 @@ const AddNewPage = () => {
     resetInputs();
   };
 
-  //TODO: form will change with formik & yup
   return (
     <form
       ref={formRef}
@@ -129,42 +129,10 @@ const AddNewPage = () => {
         </div>
         <div
           className={` h-0 mt-2 overflow-hidden  transition-all ${
-            createCampaignFormShow ? "h-52" : ""
+            createCampaignFormShow ? "h-56" : ""
           }`}
         >
-          <form className="flex flex-col gap-1">
-            <input
-              className="bg-transparent border border-[#4e4e4e] p-1 rounded-md"
-              type="text"
-              placeholder="Title"
-            />
-            <input
-              className="bg-transparent border border-[#4e4e4e] p-1 rounded-md"
-              type="text"
-              placeholder="Description"
-            />
-            <input
-              className="bg-transparent border border-[#4e4e4e] p-1 rounded-md"
-              type="number"
-              placeholder="Discount Value"
-            />
-            <div className="flex items-center gap-2">
-              Start date:
-              <input
-                className="bg-transparent flex-1  border border-[#4e4e4e] p-1 rounded-md"
-                type="datetime-local"
-                placeholder="Discount Value"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              End date:
-              <input
-                className="bg-transparent flex-1  border border-[#4e4e4e] p-1 rounded-md"
-                type="datetime-local"
-                placeholder="Discount Value"
-              />
-            </div>
-          </form>
+          <CampaignForm />
         </div>
       </div>
       <div className="flex h-max  max-xl:flex-col gap-2">
