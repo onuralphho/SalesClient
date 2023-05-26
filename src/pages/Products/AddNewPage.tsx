@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import CampaignForm from "../../components/CampaignForm";
 
 const AddNewPage = () => {
-  const [campaigns, setCampaigns] = useState<TCampaing[] | undefined>();
+  const [campaigns, setCampaigns] = useState<TCampaing[]>([]);
   const [createCampaignFormShow, setCreateCampaignFormShow] =
     useState<boolean>(false);
 
@@ -21,6 +21,14 @@ const AddNewPage = () => {
   const [campaignInput, setCampaignInput] = useState<number | undefined>(
     undefined
   );
+
+  const appendCampaigns = (newCampaign: TCampaing) => {
+    setCampaigns((prev) => [...prev, newCampaign]);
+  };
+
+  const closeCampaignForm = () => {
+    setCreateCampaignFormShow(false);
+  };
 
   useEffect(() => {
     const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
@@ -132,7 +140,7 @@ const AddNewPage = () => {
             createCampaignFormShow ? "h-56" : ""
           }`}
         >
-          <CampaignForm />
+          <CampaignForm closeCampaignForm={closeCampaignForm} appendCampaigns={appendCampaigns} />
         </div>
       </div>
       <div className="flex h-max  max-xl:flex-col gap-2">

@@ -1,6 +1,11 @@
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-const CampaignForm = () => {
+interface Props {
+    appendCampaigns: (newCampaign:TCampaing) => void;
+    closeCampaignForm: ()=>void;
+}
+
+const CampaignForm = (props:Props) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -9,7 +14,7 @@ const CampaignForm = () => {
   const discountRef = useRef<HTMLInputElement>(null);
 
   const submitCampaignFormHandler = async () => {
-    const endPointUrl = import.meta.env.VITE_ENDPOINT_URL
+    const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
     const formValues: TCampaing = {
       title: title,
       description: description,
@@ -18,15 +23,17 @@ const CampaignForm = () => {
       discountValue:
         discountRef.current && parseFloat(discountRef.current.value),
     };
-    const res = await fetch(endPointUrl+"/api/campaign/createcampaign",{
-        method:"POST",
-        body:JSON.stringify(formValues),
-        headers: { "Content-Type": "application/json" },
-    }) 
+    const res = await fetch(endPointUrl + "/api/campaign/createcampaign", {
+      method: "POST",
+      body: JSON.stringify(formValues),
+      headers: { "Content-Type": "application/json" },
+    });
 
-    const data = await res.json()
-
-   
+    const data:TCampaing = await res.json();
+    props.appendCampaigns(data);
+    setTitle("");
+    setDescription("");
+    props.closeCampaignForm();
     
   };
 
@@ -54,7 +61,6 @@ const CampaignForm = () => {
         className="bg-transparent border border-[#4e4e4e] p-1 rounded-md"
         type="number"
         placeholder="Discount Value"
-
         ref={discountRef}
       />
       <div className="flex items-center gap-2">

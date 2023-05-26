@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -6,9 +6,40 @@ interface Props {
 }
 
 const ProductCard = (props: Props) => {
+
+  const [isCampaignActive,setIsCampaignActive] = useState<boolean|undefined>()
+  const [isCampaignEnd, setIsCampaignEnd]  = useState<boolean|undefined>()
+
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const end = props.product.activeCampaign?.endDate ? new Date(props.product.activeCampaign.endDate).getTime() : 0;
+      const start = props.product.activeCampaign?.startDate ? new Date(props.product.activeCampaign.startDate).getTime() : 0;
+          const startDiff = start - now;
+          const diff = end - now;
+
+          if(startDiff>0 || diff < 0)
+          {
+            setIsCampaignActive(false)
+          }
+          else{
+            setIsCampaignActive(true)
+          }
+          
+          
+       
+    }, 1000);
+  
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+  
+
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-3/12 p-2 relative ">
-      {props.product.activeCampaign && (
+      {isCampaignActive && props.product.activeCampaign && (
         <div className="text-sm font-bold absolute group z-20  rotate-12 flex flex-col justify-center items-center -right-0 -top-1 p-1 aspect-square rounded-full bg-green-500  ">
           <span>-{props.product.activeCampaign?.discountValue} %</span>
           <div className="flex flex-col border w-max p-2 bg-[#000000ab] invisible shadow-white opacity-0 -translate-y-14 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all rounded-md  absolute font-normal text-xs right-10 -bottom-8 -rotate-12">
@@ -30,7 +61,7 @@ const ProductCard = (props: Props) => {
           </div>
         </div>
         <div className="flex p-2 gap-2 justify-between items-end text-xl  font-semibold ">
-          {props.product.discountedPrice ? (
+          {isCampaignActive && props.product.activeCampaign ? (
             <div className="flex  gap-3 items-center">
               <span className="">{props.product.discountedPrice} $</span>
               <span className="line-through text-sm opacity-80  text-red-500">

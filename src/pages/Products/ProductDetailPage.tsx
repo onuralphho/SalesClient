@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 const ProductDetailPage = () => {
   const { sku } = useParams();
+  const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
   const [productDetails, setProductDetails] = useState<IProducts | undefined>();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -11,9 +12,11 @@ const ProductDetailPage = () => {
     hours: 0,
     minutes: 0,
   });
+  const [isCampaignActive, setIsCampaignActive] = useState<
+    boolean | undefined
+  >();
 
   useEffect(() => {
-    const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
     const getDetails = async () => {
       const res = await fetch(endPointUrl + "/api/product/" + sku);
       const data: IProducts = await res.json();
@@ -31,23 +34,49 @@ const ProductDetailPage = () => {
     e.preventDefault();
   };
 
+  //Tracking end date and start date of campaign
   useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const end = new Date(endDate).getTime();
+    if (productDetails?.activeCampaign) {
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const end = new Date(endDate).getTime();
+        const start = new Date(startDate).getTime();
+        const startDiff = start - now;
+        if (startDiff > 0) {
+          setIsCampaignActive(false);
+        } else {
+          setIsCampaignActive(true);
+        }
+        const diff = end - now;
 
-      const diff = end - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        
+        if (diff > 0) {
+          setDifference({ days, hours, minutes });
+        } else {
+          const resetCampaign = async () => {
+            const res = await fetch(
+              endPointUrl + "/api/campaign/resetcampaign/" + sku,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+            const data: IProducts = await res.json();
+            setProductDetails(data);
+            clearInterval(timer);
+          };
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      console.log({ days, hours, minutes });
-      setDifference({ days, hours, minutes });
-    }, 1000);
+          resetCampaign();
+        }
+      }, 1000);
 
-    return () => {
-      clearInterval(timer);
-    };
+      return () => {
+        clearInterval(timer);
+      };
+    }
   }, [startDate, endDate]);
 
   return (
@@ -68,7 +97,7 @@ const ProductDetailPage = () => {
             <h2 className="capitalize text-2xl md:text-5xl break-words font-bold">
               {productDetails?.name}
             </h2>
-            {productDetails?.activeCampaign && (
+            {isCampaignActive && productDetails?.activeCampaign && (
               <div className="text-sm font-bold absolute group  rotate-12 flex flex-col justify-center items-center -right-4 -top-4 p-1 aspect-square rounded-full bg-green-500  ">
                 <span>-{productDetails?.activeCampaign?.discountValue} %</span>
                 <div className="flex flex-col border w-max p-2 bg-[#000000ab] invisible shadow-white opacity-0 translate-x-14 group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 transition-all rounded-md  absolute font-normal text-xs right-5 bottom-8 -rotate-12">
@@ -82,7 +111,7 @@ const ProductDetailPage = () => {
         </div>
         <div className="flex justify-between text-2xl">
           <div className="flex w-full justify-between">
-            {productDetails?.discountedPrice ? (
+            {isCampaignActive && productDetails?.activeCampaign? (
               <div className="flex flex-col gap-2  md:items-end ">
                 <div className="flex w-full  items-end gap-1 ">
                   <span className="">{productDetails?.discountedPrice} $</span>
