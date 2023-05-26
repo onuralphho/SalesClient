@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
         className="object-cover absolute w-full h-full -z-10"
         alt="Black sand"
       />
-      <div className="m-2 h-full pb-10">
+      <div className="m-2 h-full ">
         <NavBar />
 
         {children}
