@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -6,36 +6,34 @@ interface Props {
 }
 
 const ProductCard = (props: Props) => {
-
-  const [isCampaignActive,setIsCampaignActive] = useState<boolean|undefined>()
-  const [isCampaignEnd, setIsCampaignEnd]  = useState<boolean|undefined>()
-
+  const [isCampaignActive, setIsCampaignActive] = useState<
+    boolean | undefined
+  >();
+  const [isCampaignEnd, setIsCampaignEnd] = useState<boolean | undefined>();
 
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const end = props.product.activeCampaign?.endDate ? new Date(props.product.activeCampaign.endDate).getTime() : 0;
-      const start = props.product.activeCampaign?.startDate ? new Date(props.product.activeCampaign.startDate).getTime() : 0;
-          const startDiff = start - now;
-          const diff = end - now;
+      const end = props.product.activeCampaign?.endDate
+        ? new Date(props.product.activeCampaign.endDate).getTime()
+        : 0;
+      const start = props.product.activeCampaign?.startDate
+        ? new Date(props.product.activeCampaign.startDate).getTime()
+        : 0;
+      const startDiff = start - now;
+      const diff = end - now;
 
-          if(startDiff>0 || diff < 0)
-          {
-            setIsCampaignActive(false)
-          }
-          else{
-            setIsCampaignActive(true)
-          }
-          
-          
-       
+      if (startDiff > 0 || diff < 0) {
+        setIsCampaignActive(false);
+      } else {
+        setIsCampaignActive(true);
+      }
     }, 1000);
-  
+
     return () => {
       clearInterval(timer);
     };
   }, []);
-  
 
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-3/12 p-2 relative ">

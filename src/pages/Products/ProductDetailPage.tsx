@@ -20,7 +20,6 @@ const ProductDetailPage = () => {
     const getDetails = async () => {
       const res = await fetch(endPointUrl + "/api/product/" + sku);
       const data: IProducts = await res.json();
-      console.log(data);
       setProductDetails(data);
       if (data.activeCampaign) {
         setStartDate(data.activeCampaign.startDate);
@@ -32,6 +31,17 @@ const ProductDetailPage = () => {
 
   const submitFormHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const cartString = localStorage.getItem("cart");
+    if (cartString !== null) {
+      const prevCart: ICart = JSON.parse(cartString);
+      prevCart.items.push({
+        name: productDetails?.name,
+        price: productDetails?.price,
+        sku: productDetails?.sku,
+        quantity: 1,
+      });
+      localStorage.setItem("cart", JSON.stringify(prevCart));
+    }
   };
 
   //Tracking end date and start date of campaign
@@ -52,7 +62,7 @@ const ProductDetailPage = () => {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        
+
         if (diff > 0) {
           setDifference({ days, hours, minutes });
         } else {
@@ -111,7 +121,7 @@ const ProductDetailPage = () => {
         </div>
         <div className="flex justify-between text-2xl">
           <div className="flex w-full justify-between">
-            {isCampaignActive && productDetails?.activeCampaign? (
+            {isCampaignActive && productDetails?.activeCampaign ? (
               <div className="flex flex-col gap-2  md:items-end ">
                 <div className="flex w-full  items-end gap-1 ">
                   <span className="">{productDetails?.discountedPrice} $</span>

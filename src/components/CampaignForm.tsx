@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-
 interface Props {
     appendCampaigns: (newCampaign:TCampaing) => void;
     closeCampaignForm: ()=>void;
@@ -8,8 +7,12 @@ interface Props {
 const CampaignForm = (props:Props) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+
+  const startDateRef = useRef(null)
+  const endDateRef = useRef(null)
+
 
   const discountRef = useRef<HTMLInputElement>(null);
 
@@ -18,8 +21,8 @@ const CampaignForm = (props:Props) => {
     const formValues: TCampaing = {
       title: title,
       description: description,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       discountValue:
         discountRef.current && parseFloat(discountRef.current.value),
     };
@@ -30,6 +33,7 @@ const CampaignForm = (props:Props) => {
     });
 
     const data:TCampaing = await res.json();
+    console.log(data)
     props.appendCampaigns(data);
     setTitle("");
     setDescription("");
@@ -66,19 +70,20 @@ const CampaignForm = (props:Props) => {
       <div className="flex items-center gap-2">
         Start date:
         <input
-          className="bg-transparent flex-1  border border-[#4e4e4e] p-1 rounded-md"
+          className="bg-transparent flex-1  border border-[#4e4e4e] p-1 rounded-md "
           type="datetime-local"
-          value={startDate?.toISOString().slice(0, 16)}
-          onChange={(e) => setStartDate(new Date(e.target.value))}
+          ref={startDateRef}
+          onChange={(e) => setStartDate(e.target.value)}
         />
       </div>
       <div className="flex items-center gap-2">
         End date:
         <input
-          className="bg-transparent flex-1  border border-[#4e4e4e] p-1 rounded-md"
+          className="bg-transparent flex-1  border border-[#4e4e4e] p-1 rounded-md "
           type="datetime-local"
-          value={endDate?.toISOString().slice(0, 16)}
-          onChange={(e) => setEndDate(new Date(e.target.value))}
+          ref={endDateRef}
+        
+          onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
       <button
