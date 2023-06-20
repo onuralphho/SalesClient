@@ -5,6 +5,6 @@ interface ICartProduct {
   quantity?: number;
 }
 
-interface ICart {
-  items: ICartProduct[];
+interface CartState {
+	items: ICartProduct[];
 }
