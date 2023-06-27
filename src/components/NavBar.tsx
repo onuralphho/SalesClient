@@ -1,17 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux/es/exports";
-
+import { useSelector } from "react-redux";
+import { getItemsLength } from "../reducer/cartSlice";
 
 const NavBar = () => {
 
-  
-	const cartItems = useSelector((state) => state);
-
-  
-	useEffect(() => {
-		console.log(cartItems)
-	}, [cartItems]);
+	const cartLength = useSelector(getItemsLength)
 
 	return (
 		<nav className="bg-[#ffffff10] gap-2 flex items-end justify-between backdrop-blur-sm p-2 rounded-md border-[1px] border-[#dbdbdb49]">
@@ -36,7 +30,7 @@ const NavBar = () => {
 					</li>
 				</ul>
 			</div>
-			<div className="">Sepet: {cartItems.cart.items.length}</div>
+			<div className="">Sepet: {cartLength } </div>
 		</nav>
 	);
 };

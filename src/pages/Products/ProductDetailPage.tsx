@@ -2,13 +2,16 @@ import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addItem } from "../../reducer/cartSlice";
+import { sleep } from "../../utils/sleep";
 
 const ProductDetailPage = () => {
 	const { sku } = useParams();
 	const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
+
+	const [sendingState, setSendingState] = useState<boolean>(false);
 	const [productDetails, setProductDetails] = useState<IProducts | undefined>();
-	const [startDate, setStartDate] = useState(new Date());
-	const [endDate, setEndDate] = useState(new Date());
+	const [startDate, setStartDate] = useState<Date>(new Date());
+	const [endDate, setEndDate] = useState<Date>(new Date());
 	const [difference, setDifference] = useState({
 		days: 0,
 		hours: 0,
@@ -32,24 +35,15 @@ const ProductDetailPage = () => {
 		getDetails();
 	}, []);
 
-	const submitFormHandler = (e: FormEvent<HTMLFormElement>) => {
+	const submitFormHandler = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const formItem: ICartProduct = {
-			name: productDetails?.name,
-			price: productDetails?.price,
-			sku: productDetails?.sku,
-			quantity: 1,
-		};
-    
-    
-		const cartString = localStorage.getItem("cart");
-		if (cartString !== null) {
-      const prevCart = JSON.parse(cartString);
-      console.log("prevCart", prevCart)
-			prevCart.items.push();
-			localStorage.setItem("cart", JSON.stringify(prevCart));
+
+		if (productDetails) {
+			dispatch(addItem(productDetails));
 		}
-    dispatch(addItem(formItem));
+		setSendingState(true);
+		await sleep(1000);
+		setSendingState(false);
 	};
 
 	//Tracking end date and start date of campaign
@@ -153,8 +147,8 @@ const ProductDetailPage = () => {
 								Stock: {productDetails?.stockCount}
 							</span>
 
-							<button className="border border-[#ffffff48] text-sm p-2 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
-								Add to cart
+							<button disabled={sendingState} className="flex justify-center border border-[#ffffff48] text-sm w-28 p-2 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
+								{sendingState ? <div className="w-5 aspect-square border-[2.2px] rounded-full border-r-0 animate-spin "></div> :"Add to cart"}
 							</button>
 						</div>
 					</div>

@@ -1,37 +1,54 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
-
-var localCart = localStorage.getItem("cart");
-
-const initialState: CartState = {
-	items: localCart && JSON.parse(localCart),
+const saveStateToLocalStorage = (state: ICart) => {
+	try {
+		const serializedState = JSON.stringify(state);
+		localStorage.setItem("cartDetails", serializedState);
+	} catch (error) {
+		return undefined;
+	}
 };
+
+const loadStateFromLocalStorage = () => {
+	try {
+		const serializedState = localStorage.getItem("cartDetails");
+		if (serializedState === null) {
+			localStorage.setItem(
+				"cartDetails",
+				JSON.stringify({ items: [] as IProducts[] } as ICart)
+			);
+			return;
+		}
+		return JSON.parse(serializedState);
+	} catch (error) {
+		return undefined;
+	}
+};
+
+const persistedState = loadStateFromLocalStorage() as ICart;
 
 const cartSlice = createSlice({
 	name: "cart",
-	initialState,
+	initialState: persistedState,
 	reducers: {
-		addItem: (state, action: PayloadAction<ICartProduct>) => {
+		addItem: (state, action) => {
 			state.items.push(action.payload);
-			return;
+			saveStateToLocalStorage(state);
 		},
-		removeItem: (state, action: PayloadAction<string>) => {
-			state.items = state.items.filter((item) => item.sku !== action.payload);
-			return;
-		},
-		updateItemQuantity: (
-			state,
-			action: PayloadAction<{ sku: string; quantity: number }>
-		) => {
-			const { sku, quantity } = action.payload;
-			const item = state.items.find((item) => item.sku === sku);
-			if (item) {
-				item.quantity = quantity;
-			}
+		removeItem: (state, action) => {
+			state.items = state.items.filter((item) => item.sku !== action.payload.sku);
+			saveStateToLocalStorage(state);
 		},
 	},
 });
 
-export const { addItem, removeItem, updateItemQuantity } = cartSlice.actions;
+export const { addItem, removeItem } = cartSlice.actions;
+
+export const getItemsLength = (state: { cart: ICart }) => {
+	if (state && state.cart && state.cart.items) {
+		return state.cart.items.length;
+	}
+	return 0;
+};
+
 export default cartSlice.reducer;
