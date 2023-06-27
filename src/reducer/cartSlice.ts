@@ -45,8 +45,19 @@ const cartSlice = createSlice({
 export const { addItem, removeItem } = cartSlice.actions;
 
 export const getItemsLength = (state: { cart: ICart }) => {
-	if (state && state.cart && state.cart.items) {
+	if (state.cart.items) {
 		return state.cart.items.length;
+	}
+	return 0;
+};
+
+export const getTotalPrice = (state: { cart: ICart }) => {
+	if (state.cart.items) {
+		var totalPrice = 0;
+		state.cart.items.forEach(
+			(e) => (totalPrice += e.discountedPrice ? e.discountedPrice : e.price)
+		);
+		return totalPrice;
 	}
 	return 0;
 };

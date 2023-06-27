@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getItemsLength } from "../reducer/cartSlice";
+import { getItemsLength,getTotalPrice } from "../reducer/cartSlice";
 
 const NavBar = () => {
 
 	const cartLength = useSelector(getItemsLength)
+	const totalCartPrice = useSelector(getTotalPrice)
 
 	return (
 		<nav className="bg-[#ffffff10] gap-2 flex items-end justify-between backdrop-blur-sm p-2 rounded-md border-[1px] border-[#dbdbdb49]">
@@ -30,7 +31,7 @@ const NavBar = () => {
 					</li>
 				</ul>
 			</div>
-			<div className="">Sepet: {cartLength } </div>
+			<div className="">Sepet: {cartLength } total:{totalCartPrice} </div>
 		</nav>
 	);
 };
