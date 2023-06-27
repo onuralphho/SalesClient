@@ -46,7 +46,7 @@ const ProductCard = (props: Props) => {
           </div>
         </div>
       )}
-      <div className="flex flex-col gap-2 group  h-full overflow-hidden justify-between rounded-md relative border border-[#dbdbdb49] bg-[#ffffff0a] backdrop-blur-sm ">
+      <div className="flex flex-col gap-2 group h-full overflow-hidden justify-between rounded-md relative border border-[#dbdbdb49] bg-[#ffffff0a] backdrop-blur-sm ">
         <div className="flex flex-col">
           <img
             className="object-cover h-80  transition-all"
