@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const saveStateToLocalStorage = (state: ICart) => {
 	try {
@@ -15,7 +15,7 @@ const loadStateFromLocalStorage = () => {
 		if (serializedState === null) {
 			localStorage.setItem(
 				"cartDetails",
-				JSON.stringify({ items: [] as IProducts[] } as ICart)
+				JSON.stringify({ items: [] as TCartProducts[] } as ICart)
 			);
 			return;
 		}
@@ -31,8 +31,14 @@ const cartSlice = createSlice({
 	name: "cart",
 	initialState: persistedState,
 	reducers: {
-		addItem: (state, action) => {
-			state.items.push(action.payload);
+		addItem: (state, action: { payload: TCartProducts }) => {
+			var temp = state.items.find((e) => e.sku === action.payload.sku);
+			if (temp) {
+				temp.quantity += 1;
+				temp.totalPrice = temp.quantity * temp.price;
+			} else {
+				state.items.push(action.payload);
+			}
 			saveStateToLocalStorage(state);
 		},
 		removeItem: (state, action) => {
@@ -54,9 +60,7 @@ export const getItemsLength = (state: { cart: ICart }) => {
 export const getTotalPrice = (state: { cart: ICart }) => {
 	if (state.cart.items) {
 		var totalPrice = 0;
-		state.cart.items.forEach(
-			(e) => (totalPrice += e.discountedPrice ? e.discountedPrice : e.price)
-		);
+		state.cart.items.forEach((e) => (totalPrice += e.totalPrice));
 		return totalPrice;
 	}
 	return 0;

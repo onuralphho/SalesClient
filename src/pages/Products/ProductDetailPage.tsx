@@ -37,9 +37,19 @@ const ProductDetailPage = () => {
 
 	const submitFormHandler = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		var tmpQuantity = 1;
+		var product = {
+			quantity: tmpQuantity,
+			name: productDetails?.name,
+			price: productDetails?.discountedPrice ?? productDetails?.price,
+			sku: productDetails?.sku,
+			totalPrice:
+				tmpQuantity *
+				((productDetails?.discountedPrice ?? productDetails?.price) || 0),
+		} as TCartProducts;
 
 		if (productDetails) {
-			dispatch(addItem(productDetails));
+			dispatch(addItem(product));
 		}
 		setSendingState(true);
 		await sleep(1000);
@@ -120,13 +130,15 @@ const ProductDetailPage = () => {
 					</div>
 					<p className="text-lg opacity-80">{productDetails?.description}</p>
 				</div>
-				<div className="flex justify-between text-2xl">
-					<div className="flex w-full justify-between">
+				<div className="flex justify-between text-2xl  ">
+					<div className="flex w-full justify-between gap-4">
 						{isCampaignActive && productDetails?.activeCampaign ? (
 							<div className="flex flex-col gap-2  md:items-end ">
 								<div className="flex w-full  items-end gap-1 ">
-									<span className="">{productDetails?.discountedPrice} $</span>
-									<span className="line-through text-sm opacity-80  text-red-500">
+									<span className="whitespace-nowrap">
+										{productDetails?.discountedPrice} $
+									</span>
+									<span className="line-through text-sm opacity-80  whitespace-nowrap text-red-500">
 										{productDetails?.price} $
 									</span>
 								</div>
@@ -142,13 +154,19 @@ const ProductDetailPage = () => {
 						) : (
 							<span className="">{productDetails?.price} $ </span>
 						)}
-						<div className="flex gap-2 items-end">
-							<span className=" bottom-1 left-4 text-xs opacity-80">
+						<div className="flex max-sm:flex-col gap-2 items-end ">
+							<span className=" text-xs opacity-80">
 								Stock: {productDetails?.stockCount}
 							</span>
 
-							<button disabled={sendingState} className="flex justify-center border border-[#ffffff48] text-sm w-28 p-2 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
-								{sendingState ? <div className="w-5 aspect-square border-[2.2px] rounded-full border-r-0 animate-spin "></div> :"Add to cart"}
+							<button
+								disabled={sendingState}
+								className="flex justify-center border border-[#ffffff48] text-sm w-28 p-2 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
+								{sendingState ? (
+									<div className="w-5 aspect-square border-[2.2px] rounded-full border-r-0 animate-spin "></div>
+								) : (
+									"Add to cart"
+								)}
 							</button>
 						</div>
 					</div>
