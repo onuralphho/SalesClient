@@ -7,6 +7,8 @@ type TCartProducts = {
 };
 
 interface ICart {
+	orderId: string;
 	items: TCartProducts[];
+	address: string;
+	paymentMethod: "cash" | "credit" ;
 }
-

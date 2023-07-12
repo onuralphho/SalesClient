@@ -33,7 +33,7 @@ const ProductDetailPage = () => {
 			}
 		};
 		getDetails();
-	}, []);
+	}, [sku]);
 
 	const submitFormHandler = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -56,7 +56,7 @@ const ProductDetailPage = () => {
 		setSendingState(false);
 	};
 
-	//Tracking end date and start date of campaign
+	
 	useEffect(() => {
 		if (productDetails?.activeCampaign) {
 			const timer = setInterval(() => {

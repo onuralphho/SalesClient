@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from 'uuid';
 
 const saveStateToLocalStorage = (state: ICart) => {
 	try {
@@ -15,7 +16,12 @@ const loadStateFromLocalStorage = () => {
 		if (serializedState === null) {
 			localStorage.setItem(
 				"cartDetails",
-				JSON.stringify({ items: [] as TCartProducts[] } as ICart)
+				JSON.stringify({
+					items: [] as TCartProducts[],
+					address: "test adress",
+					paymentMethod: "credit",
+					orderId:uuidv4() ,
+				} as ICart)
 			);
 			return;
 		}
@@ -29,7 +35,7 @@ const persistedState = loadStateFromLocalStorage() as ICart;
 
 const cartSlice = createSlice({
 	name: "cart",
-	initialState: persistedState,
+	initialState: { ...persistedState},
 	reducers: {
 		addItem: (state, action: { payload: TCartProducts }) => {
 			var temp = state.items.find((e) => e.sku === action.payload.sku);
@@ -45,10 +51,15 @@ const cartSlice = createSlice({
 			state.items = state.items.filter((item) => item.sku !== action.payload.sku);
 			saveStateToLocalStorage(state);
 		},
+		completeOrder:(state,action)=>{
+			state.orderId = uuidv4();
+			state.items = [];
+			saveStateToLocalStorage(state)
+		}
 	},
 });
 
-export const { addItem, removeItem } = cartSlice.actions;
+export const { addItem, removeItem,completeOrder } = cartSlice.actions;
 
 export const getItemsLength = (state: { cart: ICart }) => {
 	if (state.cart.items) {
