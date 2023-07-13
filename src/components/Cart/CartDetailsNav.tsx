@@ -30,6 +30,7 @@ const CartDetailsNav = () => {
 				<span>Total:</span>
 				<span>{totalPrice}$</span>
 				<button
+					disabled={cart.items.length === 0}
 					onClick={async () => {
 						const res = await fetch(endPointUrl + "/api/orders/addorder", {
 							method: "POST",
@@ -40,7 +41,7 @@ const CartDetailsNav = () => {
 						console.log(data);
 						dispatch(completeOrder(cart));
 					}}
-					className="rounded text-sm bg-green-400 text-white px-2 p-1">
+					className="rounded text-sm bg-green-400 disabled:bg-stone-500 disabled:opacity-40 text-white px-2 p-1">
 					Complete
 				</button>
 			</div>
