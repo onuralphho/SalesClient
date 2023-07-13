@@ -72,7 +72,7 @@ const ProductCard = (props: Props) => {
 
           {props.product.stockCount > 0 ? (
             <Link
-              to={props.product.sku}
+              to={"/products/" + props.product.sku}
               className=" py-0.5 items-center text-lg px-4 rounded-md border group-hover:bg-green-600 group-hover:border-green-600 transition-all"
             >
               Buy

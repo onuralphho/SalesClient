@@ -4,11 +4,8 @@ import ProductsPage from "./pages/Products/ProductsPage";
 import AddNewPage from "./pages/Products/AddNewPage";
 import Home from "./pages/Home/Home";
 import ProductDetailPage from "./pages/Products/ProductDetailPage";
-import { useEffect } from "react";
 
 const App = () => {
-
-
 	return (
 		<Routes>
 			<Route path="/" element={<ProductsPage />} />
