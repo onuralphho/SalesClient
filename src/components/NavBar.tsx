@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { getItemsLength } from "../reducer/cartSlice";
 import { MdShoppingCart } from "react-icons/md";
 import { IoTriangle } from "react-icons/io5";
+import { MenuItems } from "../constants/MenuConst";
 
 import CartDetailsNav from "./Cart/CartDetailsNav";
 
@@ -51,20 +52,16 @@ const NavBar = () => {
 						<div className="h-[2px] w-4 bg-white rounded-full"></div>
 						<div className="h-[2px] w-4 bg-white rounded-full"></div>
 					</label>
-					<li className="relative group max-sm:absolute max-sm:top-7 max-sm:p-1 max-sm:bg-white max-sm:text-[#303030] rounded font-semibold max-sm:hidden peer-checked:block">
-						<Link
-							to={"/products"}
-							className="hover:bg-[#ffffff13] px-2 transition-all rounded-md whitespace-nowrap">
-							Products
-						</Link>
-					</li>
-					<li className="relative group max-sm:absolute max-sm:top-16 max-sm:p-1 max-sm:bg-white max-sm:text-[#303030] rounded font-semibold max-sm:hidden  peer-checked:block">
-						<Link
-							to={"products/add"}
-							className="hover:bg-[#ffffff13] px-2 transition-all rounded-md whitespace-nowrap">
-							Add New
-						</Link>
-					</li>
+
+					{MenuItems.map((menuItem,index) => (
+						<li key={index} className="relative group max-sm:absolute max-sm:top-16 max-sm:p-1 max-sm:bg-white max-sm:text-[#303030] rounded font-semibold max-sm:hidden  peer-checked:block">
+							<Link
+								to={menuItem.url}
+								className="hover:bg-[#ffffff13] px-2 transition-all rounded-md whitespace-nowrap">
+								{menuItem.title}
+							</Link>
+						</li>
+					))}
 				</ul>
 			</div>
 			<div ref={dropDownRef} className=" relative   cursor-pointer ">

@@ -3,6 +3,7 @@ import { getTotalPrice } from "../../reducer/cartSlice";
 import { Link } from "react-router-dom";
 import { completeOrder } from "../../reducer/cartSlice";
 
+
 const CartDetailsNav = () => {
 	const cart = useSelector((state: { cart: ICart }) => state.cart);
 	const cartItems = useSelector((state: { cart: ICart }) => state.cart.items);
