@@ -29,17 +29,32 @@ const Orders = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-wrap gap-2 py-2">
+		<div className="flex flex-wrap  py-2">
 			{orders.map((order) => (
-				<div key={order.orderId} className="flex flex-col gap-2 border rounded backdrop-blur-sm p-2">
-					{order.items.map(item=>(<div key={item.sku} className="bg-black p-1">
-                        <span>{item.quantity}</span>
-                        <span>{item.name}</span>
-                        <span>{item.price}$</span>
-                        <span>{item.totalPrice}</span>
-                    </div>))}
-                    <div>{order.address}</div>
-                    <div>{order.paymentMethod}</div>
+				<div className="p-2 w-3/12">
+					<div
+						key={order.orderId}
+						className="flex flex-col gap-2 p-2 border border-[#dbdbdb49] bg-[#ffffff0a] rounded-md backdrop-blur-sm ">
+						{order.items.length > 0 ? (
+							order.items.map((item) => (
+								<div
+									key={item.sku}
+									className="flex justify-between border-[#dbdbdb49] bg-[#00000096] rounded-md backdrop-blur-sm  p-1 px-2">
+									<div className="flex gap-2">
+										<span>{item.quantity}x</span>
+										<span>{item.name}</span>
+									</div>
+									<span>{item.price}$</span>
+								</div>
+							))
+						) : (
+							<div className="bg-black p-1 rounded-md px-2 text-center">
+								No items in cart!  
+							</div>
+						)}
+						<div>Adress: {order.address}</div>
+						<div>Payment Method: {order.paymentMethod}</div>
+					</div>
 				</div>
 			))}
 		</div>
