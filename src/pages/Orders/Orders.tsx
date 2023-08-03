@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 
 interface IOrders {
-	orderId: string;
+	Id: string;
 	address: string;
 	paymentMethod: string;
 	items: {
 		sku: string;
-		quantity: 0;
-		price: 0;
-		totalPrice: 0;
+		quantity: number;
+		price: number;
+		totalPrice:number;
 		name: string;
 	}[];
 }
@@ -33,7 +33,7 @@ const Orders = () => {
 			{orders.map((order) => (
 				<div className="p-2 w-3/12">
 					<div
-						key={order.orderId}
+						key={order.Id}
 						className="flex flex-col gap-2 p-2 border border-[#dbdbdb49] bg-[#ffffff0a] rounded-md backdrop-blur-sm ">
 						{order.items.length > 0 ? (
 							order.items.map((item) => (

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from 'uuid';
 
 const saveStateToLocalStorage = (state: ICart) => {
 	try {
@@ -19,8 +18,7 @@ const loadStateFromLocalStorage = () => {
 				JSON.stringify({
 					items: [] as TCartProducts[],
 					address: "test adress",
-					paymentMethod: "credit",
-					orderId:uuidv4() ,
+					paymentMethod: "cash",
 				} as ICart)
 			);
 			return;
@@ -35,13 +33,13 @@ const persistedState = loadStateFromLocalStorage() as ICart;
 
 const cartSlice = createSlice({
 	name: "cart",
-	initialState: { ...persistedState},
+	initialState: { ...persistedState },
 	reducers: {
 		addItem: (state, action: { payload: TCartProducts }) => {
-			var temp = state.items.find((e) => e.sku === action.payload.sku);
-			if (temp) {
-				temp.quantity += 1;
-				temp.totalPrice = temp.quantity * temp.price;
+			console.log(action.payload);
+			var product = state.items.find((e) => e.sku === action.payload.sku);
+			if (product) {
+				product.quantity += 1;
 			} else {
 				state.items.push(action.payload);
 			}
@@ -51,15 +49,14 @@ const cartSlice = createSlice({
 			state.items = state.items.filter((item) => item.sku !== action.payload.sku);
 			saveStateToLocalStorage(state);
 		},
-		completeOrder:(state,action)=>{
-			state.orderId = uuidv4();
+		completeOrder: (state, action) => {
 			state.items = [];
-			saveStateToLocalStorage(state)
-		}
+			saveStateToLocalStorage(state);
+		},
 	},
 });
 
-export const { addItem, removeItem,completeOrder } = cartSlice.actions;
+export const { addItem, removeItem, completeOrder } = cartSlice.actions;
 
 export const getItemsLength = (state: { cart: ICart }) => {
 	if (state.cart.items) {
@@ -71,10 +68,11 @@ export const getItemsLength = (state: { cart: ICart }) => {
 export const getTotalPrice = (state: { cart: ICart }) => {
 	if (state.cart.items) {
 		var totalPrice = 0;
-		state.cart.items.forEach((e) => (totalPrice += e.totalPrice));
+		state.cart.items.forEach((e) => (totalPrice += e.price * e.quantity));
 		return totalPrice;
+	} else {
+		return 0;
 	}
-	return 0;
 };
 
 export default cartSlice.reducer;

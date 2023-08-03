@@ -37,16 +37,15 @@ const ProductDetailPage = () => {
 
 	const submitFormHandler = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		var tmpQuantity = 1;
+		
 		var product = {
-			quantity: tmpQuantity,
-			name: productDetails?.name,
-			price: productDetails?.discountedPrice ?? productDetails?.price,
+			quantity: 1,
 			sku: productDetails?.sku,
-			totalPrice:
-				tmpQuantity *
-				((productDetails?.discountedPrice ?? productDetails?.price) || 0),
+			name: productDetails?.name,
+			price: productDetails?.price
 		} as TCartProducts;
+
+		console.log(product)
 
 		if (productDetails) {
 			dispatch(addItem(product));

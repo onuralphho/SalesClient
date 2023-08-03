@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalPrice } from "../../reducer/cartSlice";
-import { Link } from "react-router-dom";
 import { completeOrder } from "../../reducer/cartSlice";
 
 
 const CartDetailsNav = () => {
 	const cart = useSelector((state: { cart: ICart }) => state.cart);
 	const cartItems = useSelector((state: { cart: ICart }) => state.cart.items);
-	const totalPrice = useSelector(getTotalPrice);
+	const cartTotalPrice = useSelector(getTotalPrice);
 	const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
 
 	const dispatch = useDispatch();
@@ -23,13 +22,13 @@ const CartDetailsNav = () => {
 							<span className="italic">x{e.quantity}</span>
 							<span className="whitespace-nowrap">{e.name}</span>
 						</div>
-						<span>{e.totalPrice}$</span>
+						<span>{e.price}$</span>
 					</li>
 				))}
 			</ul>
 			<div className="text-lg border-t-2  p-2 flex justify-end items-center gap-2 font-bold">
 				<span>Total:</span>
-				<span>{totalPrice}$</span>
+				<span>{cartTotalPrice}$</span>
 				<button
 					disabled={cart.items.length === 0}
 					onClick={async () => {
@@ -38,9 +37,14 @@ const CartDetailsNav = () => {
 							body: JSON.stringify(cart),
 							headers: { "Content-Type": "application/json" },
 						});
-						const data = await res.json();
-						console.log(data);
-						dispatch(completeOrder(cart));
+						if(res.status === 200){
+							const data = await res.json();
+							console.log(data)
+							dispatch(completeOrder(cart));
+						}else{
+							//TODO:Alert system will be implemented
+						}
+						
 					}}
 					className="rounded text-sm bg-green-400 disabled:bg-stone-500 disabled:opacity-40 text-white px-2 p-1">
 					Complete
