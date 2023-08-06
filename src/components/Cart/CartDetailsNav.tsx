@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalPrice } from "../../reducer/cartSlice";
 import { completeOrder } from "../../reducer/cartSlice";
+import PrimaryButton from "../UI/PrimaryButton";
 
 
 const CartDetailsNav = () => {
@@ -29,8 +30,11 @@ const CartDetailsNav = () => {
 			<div className="text-lg border-t-2  p-2 flex justify-end items-center gap-2 font-bold">
 				<span>Total:</span>
 				<span>{cartTotalPrice}$</span>
-				<button
+				<PrimaryButton
+					type="button"
+					buttonPreset="success"
 					disabled={cart.items.length === 0}
+					className="text-white"
 					onClick={async () => {
 						const res = await fetch(endPointUrl + "/api/orders/addorder", {
 							method: "POST",
@@ -46,9 +50,9 @@ const CartDetailsNav = () => {
 						}
 						
 					}}
-					className="rounded text-sm bg-green-400 disabled:bg-stone-500 disabled:opacity-40 text-white px-2 p-1">
+					>
 					Complete
-				</button>
+				</PrimaryButton>
 			</div>
 		</div>
 	);

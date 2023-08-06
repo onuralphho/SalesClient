@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addItem } from "../../reducer/cartSlice";
 import { sleep } from "../../utils/sleep";
+import PrimaryButton from "../../components/UI/PrimaryButton";
 
 const ProductDetailPage = () => {
 	const { sku } = useParams();
@@ -37,15 +38,15 @@ const ProductDetailPage = () => {
 
 	const submitFormHandler = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		
+
 		var product = {
 			quantity: 1,
 			sku: productDetails?.sku,
 			name: productDetails?.name,
-			price: productDetails?.price
+			price: productDetails?.price,
 		} as TCartProducts;
 
-		console.log(product)
+		console.log(product);
 
 		if (productDetails) {
 			dispatch(addItem(product));
@@ -55,7 +56,6 @@ const ProductDetailPage = () => {
 		setSendingState(false);
 	};
 
-	
 	useEffect(() => {
 		if (productDetails?.activeCampaign) {
 			const timer = setInterval(() => {
@@ -158,15 +158,9 @@ const ProductDetailPage = () => {
 								Stock: {productDetails?.stockCount}
 							</span>
 
-							<button
-								disabled={sendingState}
-								className="flex justify-center border border-[#ffffff48] text-sm w-28 p-2 rounded-md hover:bg-green-500 hover:border-green-500 transition-all">
-								{sendingState ? (
-									<div className="w-5 aspect-square border-[2.2px] rounded-full border-r-0 animate-spin "></div>
-								) : (
-									"Add to cart"
-								)}
-							</button>
+							<PrimaryButton type="submit" buttonPreset="success" animationCheck={sendingState} disabled={sendingState} >
+								Add to cart
+							</PrimaryButton>
 						</div>
 					</div>
 				</div>
