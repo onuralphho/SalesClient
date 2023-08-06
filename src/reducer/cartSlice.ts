@@ -38,7 +38,14 @@ const cartSlice = createSlice({
 		addItem: (state, action: { payload: TCartProducts }) => {
 			var product = state.items.find((e) => e.sku === action.payload.sku);
 			if (product) {
-				product.quantity += 1;
+				if (
+					action.payload.totalStock &&
+					action.payload.totalStock > product.quantity
+				) {
+					product.quantity += 1;
+				} else {
+					//TODO: Alert will be implemented
+				}
 			} else {
 				state.items.push(action.payload);
 			}

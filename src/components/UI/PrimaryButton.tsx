@@ -26,7 +26,7 @@ const PrimaryButton = (props: Props) => {
       ? "bg-red-600 border-red-400 hover:bg-red-400"
       : props.buttonPreset === "success" 
       && "bg-lime-500 border-lime-300 hover:bg-lime-300"
-  } disabled:bg-gray-400 ${props.className}`
+  } disabled:bg-gray-400 disabled:border-gray-300 ${props.className}`
 
 	return (
 		<>

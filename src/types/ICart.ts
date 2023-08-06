@@ -4,6 +4,7 @@ type TCartProducts = {
 	price: number;
 	totalPrice: number;
 	name: string;
+	totalStock?:number;
 };
 
 interface ICart {
