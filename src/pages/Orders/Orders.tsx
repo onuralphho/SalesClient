@@ -29,9 +29,9 @@ const Orders = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-wrap  py-2">
+		<div className="flex flex-wrap container mx-auto py-2">
 			{orders.map((order) => (
-				<div className="p-2 w-3/12">
+				<div className="p-2 md:w-4/12 min-w-max w-full">
 					<div
 						key={order.Id}
 						className="flex flex-col gap-2 p-2 border border-[#dbdbdb49] bg-[#ffffff0a] rounded-md backdrop-blur-sm ">
