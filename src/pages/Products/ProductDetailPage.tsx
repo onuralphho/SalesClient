@@ -46,8 +46,6 @@ const ProductDetailPage = () => {
 			price: productDetails?.price,
 		} as TCartProducts;
 
-		console.log(product);
-
 		if (productDetails) {
 			dispatch(addItem(product));
 		}
@@ -158,7 +156,11 @@ const ProductDetailPage = () => {
 								Stock: {productDetails?.stockCount}
 							</span>
 
-							<PrimaryButton type="submit" buttonPreset="success" animationCheck={sendingState} disabled={sendingState} >
+							<PrimaryButton
+								type="submit"
+								buttonPreset="success"
+								animationCheck={sendingState}
+								disabled={sendingState}>
 								Add to cart
 							</PrimaryButton>
 						</div>

@@ -15,7 +15,7 @@ type Props = {
 const PrimaryButton = (props: Props) => {
 	const [mousePress, setMousePress] = useState<boolean>(false);
 
-  const buttonClassName = `h-full text-base border border-r-0 border-b-0 rounded-md px-6 py-1 duration-75  ${
+  const buttonClassName = `h-full text-base border border-r-0 border-b-0 rounded-md px-6 py-1 duration-75 ${
     props.animationCheck && "animate-pulse"
   } ${mousePress && "scale-95"} ${
     props.buttonPreset === "primary"
