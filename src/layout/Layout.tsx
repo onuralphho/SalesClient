@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import backgroundImg from "../assets/background.jpg";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 type LayoutProps = {
 	children: React.ReactNode;
 };
@@ -13,10 +14,10 @@ const Layout = ({ children }: LayoutProps) => {
 				className="object-cover absolute w-full h-full -z-10"
 				alt="Black sand"
 			/>
-			<div className="m-2 h-full ">
+			<div className=" h-full ">
 				<NavBar />
-
 				{children}
+				<Footer/>
 			</div>
 		</div>
 	);

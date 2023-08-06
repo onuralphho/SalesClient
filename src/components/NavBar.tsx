@@ -36,7 +36,7 @@ const NavBar = () => {
 	}, []);
 
 	return (
-		<nav className="bg-[#ffffff10] relative z-10  gap-2 flex items-end justify-between backdrop-blur-sm p-2 rounded-md border-[1px] border-[#dbdbdb49]">
+		<nav className="bg-[#ffffff10] m-2 relative z-10  gap-2 flex items-end justify-between backdrop-blur-sm p-2 rounded-md border-[1px] border-[#dbdbdb49]">
 			<div className="flex items-end">
 				<Link to={"/"}>
 					<h1 className="text-3xl md:text-5xl border-r pr-4">Colin's</h1>
