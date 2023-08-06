@@ -156,13 +156,22 @@ const ProductDetailPage = () => {
 								Stock: {productDetails?.stockCount}
 							</span>
 
-							<PrimaryButton
-								type="submit"
-								buttonPreset="success"
-								animationCheck={sendingState}
-								disabled={sendingState}>
-								Add to cart
-							</PrimaryButton>
+							{productDetails?.stockCount && productDetails?.stockCount > 0 ? (
+								<PrimaryButton
+									type="submit"
+									buttonPreset="success"
+									animationCheck={sendingState}
+									disabled={sendingState}>
+									Add to cart
+								</PrimaryButton>
+							) : (
+								<PrimaryButton
+									type="button"
+									buttonPreset="primary"
+									disabled={true}>
+									Out of stock
+								</PrimaryButton>
+							)}
 						</div>
 					</div>
 				</div>
