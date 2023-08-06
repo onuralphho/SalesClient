@@ -43,7 +43,6 @@ const CartDetailsNav = () => {
 						});
 						if(res.status === 200){
 							const data = await res.json();
-							console.log(data)
 							dispatch(completeOrder(cart));
 						}else{
 							//TODO:Alert system will be implemented

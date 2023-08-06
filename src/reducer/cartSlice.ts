@@ -36,7 +36,6 @@ const cartSlice = createSlice({
 	initialState: { ...persistedState },
 	reducers: {
 		addItem: (state, action: { payload: TCartProducts }) => {
-			console.log(action.payload);
 			var product = state.items.find((e) => e.sku === action.payload.sku);
 			if (product) {
 				product.quantity += 1;
