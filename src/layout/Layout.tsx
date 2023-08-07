@@ -16,8 +16,8 @@ const Layout = ({ children }: LayoutProps) => {
 			/>
 			<div className=" h-full ">
 				<NavBar />
-				{children}
-				<Footer/>
+				<div className="min-h-screen">{children}</div>
+				<Footer />
 			</div>
 		</div>
 	);

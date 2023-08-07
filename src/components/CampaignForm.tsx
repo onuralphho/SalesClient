@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
+import PrimaryButton from "./UI/PrimaryButton";
 interface Props {
 	appendCampaigns: (newCampaign: TCampaing) => void;
 	closeCampaignForm: () => void;
+	calculateCampaignHeight: (ref: RefObject<HTMLDivElement>) => void;
 }
 
 const CampaignForm = (props: Props) => {
@@ -12,8 +14,8 @@ const CampaignForm = (props: Props) => {
 
 	const startDateRef = useRef(null);
 	const endDateRef = useRef(null);
-
 	const discountRef = useRef<HTMLInputElement>(null);
+	const campaignRef = useRef<HTMLDivElement>(null);
 
 	const submitCampaignFormHandler = async () => {
 		const endPointUrl = import.meta.env.VITE_ENDPOINT_URL;
@@ -37,8 +39,12 @@ const CampaignForm = (props: Props) => {
 		props.closeCampaignForm();
 	};
 
+	useEffect(() => {
+		props.calculateCampaignHeight(campaignRef);
+	}, []);
+
 	return (
-		<div className="flex flex-col gap-1">
+		<div ref={campaignRef} className="flex flex-col gap-1">
 			<input
 				className="bg-transparent border border-[#4e4e4e] p-1 rounded-md"
 				type="text"
@@ -81,12 +87,12 @@ const CampaignForm = (props: Props) => {
 					onChange={(e) => setEndDate(e.target.value)}
 				/>
 			</div>
-			<button
+			<PrimaryButton
 				type="button"
-				onClick={submitCampaignFormHandler}
-				className="bg-green-500 rounded-md p-1">
+				buttonPreset="success"
+				onClick={submitCampaignFormHandler}>
 				Create campaign
-			</button>
+			</PrimaryButton>
 		</div>
 	);
 };

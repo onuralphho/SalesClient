@@ -1,7 +1,7 @@
 const ProductLoading = () => {
   return (
     <>
-      {Array(8)
+      {Array(16)
         .fill(null)
         .map((e, i) => (
           <div key={i} className="w-full sm:w-1/2 md:w-1/3 lg:w-3/12 p-2 relative ">

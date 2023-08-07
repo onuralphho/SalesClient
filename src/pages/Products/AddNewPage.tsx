@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import CampaignForm from "../../components/CampaignForm";
 import PrimaryButton from "../../components/UI/PrimaryButton";
 
@@ -6,6 +6,7 @@ const AddNewPage = () => {
 	const [campaigns, setCampaigns] = useState<TCampaing[]>([]);
 	const [createCampaignFormShow, setCreateCampaignFormShow] =
 		useState<boolean>(false);
+	const [campaignSectionHeight, setCampaignSectionHeight] = useState<number>(0);
 
 	const [formLoading, setFormLoading] = useState<boolean>(false);
 	const [errorDetail, setErrorDetail] = useState<string>("");
@@ -77,6 +78,13 @@ const AddNewPage = () => {
 		}
 	};
 
+	const calculateCampaignHeight = (ref: RefObject<HTMLDivElement>) => {
+		if (ref.current) {
+			console.log(ref.current.clientHeight);
+			setCampaignSectionHeight(ref.current.clientHeight);
+		}
+	};
+
 	return (
 		<div className="min-h-screen container mx-auto">
 			<form
@@ -87,6 +95,7 @@ const AddNewPage = () => {
 					<label className="flex flex-col gap-1 " htmlFor="name">
 						<span className="text-2xl">Name</span>
 						<input
+							autoFocus
 							className="bg-transparent border-[1px] border-[#4e4e4e] p-1 px-4 rounded-lg"
 							type="text"
 							value={nameInput}
@@ -140,17 +149,21 @@ const AddNewPage = () => {
 						</button>
 					</div>
 					<div
-						className={` h-0 mt-2 overflow-hidden  transition-all ${
-							createCampaignFormShow ? "h-56" : ""
-						}`}>
+						className="mt-2 overflow-hidden transition-all"
+						style={{
+							height: createCampaignFormShow
+								? `${campaignSectionHeight}px`
+								: "0",
+						}}>
 						<CampaignForm
+							calculateCampaignHeight={calculateCampaignHeight}
 							closeCampaignForm={closeCampaignForm}
 							appendCampaigns={appendCampaigns}
 						/>
 					</div>
 				</div>
 				<div className="flex max-xl:flex-col gap-2">
-					<div className="bg-[#ffffff0a] flex-1 rounded-lg backdrop-blur-sm border-[1px] border-[#4e4e4e] p-5">
+					<div className="bg-[#ffffff0a] h-max flex-1 rounded-lg backdrop-blur-sm border-[1px] border-[#4e4e4e] p-5">
 						<label className="flex flex-col gap-1" htmlFor="price">
 							<span className="text-2xl">Price</span>
 							<input
@@ -161,7 +174,7 @@ const AddNewPage = () => {
 							/>
 						</label>
 					</div>
-					<div className="bg-[#ffffff0a] flex-1 rounded-lg backdrop-blur-sm border-[1px] border-[#4e4e4e] p-5">
+					<div className="bg-[#ffffff0a] h-max flex-1 rounded-lg backdrop-blur-sm border-[1px] border-[#4e4e4e] p-5">
 						<label className="flex flex-col gap-1 " htmlFor="stockcount">
 							<span className="text-2xl">Stock Count</span>
 							<input

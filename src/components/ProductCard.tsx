@@ -13,27 +13,29 @@ const ProductCard = (props: Props) => {
 	const [isCampaignEnd, setIsCampaignEnd] = useState<boolean | undefined>();
 
 	useEffect(() => {
-		const timer = setInterval(() => {
-			const now = new Date().getTime();
-			const end = props.product.activeCampaign?.endDate
-				? new Date(props.product.activeCampaign.endDate).getTime()
-				: 0;
-			const start = props.product.activeCampaign?.startDate
-				? new Date(props.product.activeCampaign.startDate).getTime()
-				: 0;
-			const startDiff = start - now;
-			const diff = end - now;
+		if (props.product.activeCampaign) {
+			const timer = setInterval(() => {
+				const now = new Date().getTime();
+				const end = props.product.activeCampaign?.endDate
+					? new Date(props.product.activeCampaign.endDate).getTime()
+					: 0;
+				const start = props.product.activeCampaign?.startDate
+					? new Date(props.product.activeCampaign.startDate).getTime()
+					: 0;
+				const startDiff = start - now;
+				const diff = end - now;
 
-			if (startDiff > 0 || diff < 0) {
-				setIsCampaignActive(false);
-			} else {
-				setIsCampaignActive(true);
-			}
-		}, 1000);
+				if (startDiff > 0 || diff < 0) {
+					setIsCampaignActive(false);
+				} else {
+					setIsCampaignActive(true);
+				}
+			}, 1000);
 
-		return () => {
-			clearInterval(timer);
-		};
+			return () => {
+				clearInterval(timer);
+			};
+		}
 	}, []);
 
 	return (
