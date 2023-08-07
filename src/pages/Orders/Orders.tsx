@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IOrders {
 	Id: string;
@@ -8,7 +8,7 @@ interface IOrders {
 		sku: string;
 		quantity: number;
 		price: number;
-		totalPrice:number;
+		totalPrice: number;
 		name: string;
 	}[];
 }
@@ -29,34 +29,41 @@ const Orders = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-wrap container mx-auto py-2">
-			{orders.map((order) => (
-				<div className="p-2 md:w-4/12 min-w-max w-full">
-					<div
-						key={order.Id}
-						className="flex flex-col gap-2 p-2 border border-[#dbdbdb49] bg-[#ffffff0a] rounded-md backdrop-blur-sm ">
-						{order.items.length > 0 ? (
-							order.items.map((item) => (
-								<div
-									key={item.sku}
-									className="flex justify-between border-[#dbdbdb49] bg-[#00000096] rounded-md backdrop-blur-sm  p-1 px-2">
-									<div className="flex gap-2">
-										<span>{item.quantity}x</span>
-										<span>{item.name}</span>
+		<div className={`flex flex-wrap container mx-auto py-2 ${orders.length <= 0 && "justify-center"}`}>
+			{orders.length > 0 ? (
+				orders.map((order) => (
+					<div className="p-2 md:w-4/12 min-w-max w-full">
+						<div
+							key={order.Id}
+							className="flex flex-col gap-2 p-2 border border-[#dbdbdb49] bg-[#ffffff0a] rounded-md backdrop-blur-sm ">
+							{order.items.length > 0 ? (
+								order.items.map((item) => (
+									<div
+										key={item.sku}
+										className="flex justify-between border-[#dbdbdb49] bg-[#00000096] rounded-md backdrop-blur-sm  p-1 px-2">
+										<div className="flex gap-2">
+											<span>{item.quantity}x</span>
+											<span>{item.name}</span>
+										</div>
+										<span>{item.price}$</span>
 									</div>
-									<span>{item.price}$</span>
+								))
+							) : (
+								<div className="bg-black p-1 rounded-md px-2 text-center">
+									No items in cart!
 								</div>
-							))
-						) : (
-							<div className="bg-black p-1 rounded-md px-2 text-center">
-								No items in cart!  
-							</div>
-						)}
-						<div>Adress: {order.address}</div>
-						<div>Payment Method: {order.paymentMethod}</div>
+							)}
+							<div>Adress: {order.address}</div>
+							<div>Payment Method: {order.paymentMethod}</div>
+						</div>
 					</div>
+				))
+			) : (
+				<div className="text-3xl relative overflow-hidden border border-[#dbdbdb49] border-r-0 border-b-0 p-4 rounded-md backdrop-blur-sm bg-[#ffffff17] ">
+					<span>No order found</span>
+					<div className="absolute bg-[#ffffff59] w-full h-full top-0 left-0 -z-10 blur-md animate-ping "></div>
 				</div>
-			))}
+			)}
 		</div>
 	);
 };
